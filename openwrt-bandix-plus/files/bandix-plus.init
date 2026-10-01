@@ -54,6 +54,18 @@ start_service() {
 		logger -t bandix-plus "no iface configured"
 		return 1
 	}
+	case "$traffic_retention_days" in
+		''|*[!0-9]*)
+			logger -t bandix-plus "invalid traffic_retention_days: $traffic_retention_days"
+			return 1
+		;;
+	esac
+	case "$history_window_minutes" in
+		''|*[!0-9]*)
+			logger -t bandix-plus "invalid history_window_minutes: $history_window_minutes"
+			return 1
+		;;
+	esac
 	case "$port" in
 		''|*[!0-9]*)
 			logger -t bandix-plus "invalid port: $port"
