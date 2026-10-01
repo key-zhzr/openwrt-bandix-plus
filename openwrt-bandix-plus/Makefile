@@ -1,7 +1,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=bandix-plus
-PKG_VERSION:=0.1.3
+PKG_VERSION:=0.1.6
 PKG_RELEASE:=1
 
 PKG_LICENSE:=Apache-2.0
@@ -13,55 +13,19 @@ include $(INCLUDE_DIR)/package.mk
 include $(TOPDIR)/feeds/packages/lang/rust/rust-values.mk
 
 # 二进制文件的文件名和URL
-RUST_BANDIX_PLUS_VERSION:=0.1.3
+RUST_BANDIX_PLUS_VERSION:=0.1.6
 RUST_BINARY_FILENAME:=bandix-plus-$(RUST_BANDIX_PLUS_VERSION)-$(RUSTC_TARGET_ARCH).tar.gz
 
 
 # 修正下载地址定义方式
 PKG_SOURCE:=$(RUST_BINARY_FILENAME)
-PKG_SOURCE_URL:=https://github.com/zhiyangyang/bandix-plus/releases/download/v$(RUST_BANDIX_PLUS_VERSION)
+PKG_SOURCE_URL:=https://github.com/key-zhzr/bandix-plus/releases/download/v$(RUST_BANDIX_PLUS_VERSION)
 
 # 修正二进制文件校验值
 ifeq ($(ARCH),aarch64)
-	PKG_HASH:=806e5ac406ceea154fe56ab8b514d562af06af961d35fe67cb04b4252b0a517d
-else ifeq ($(ARCH),arm) # update.sh skip this tag, do not delete this comment
-	# Ref https://github.com/openwrt/packages/blob/master/lang/rust/rust-values.mk
-
-	ARM_CPU_TYPE:=arm-armel
-	ifeq ($(CONFIG_arm_v6)$(CONFIG_arm_v7),)
-		ARM_CPU_TYPE:=$(subst arm-,armv5te-,$(ARM_CPU_TYPE))
-	else ifeq ($(CONFIG_arm_v7),y)
-		ARM_CPU_TYPE:=$(subst arm-,armv7-,$(ARM_CPU_TYPE))
-	endif
-
-	ifeq ($(CONFIG_HAS_FPU),y)
-		ARM_CPU_TYPE:=$(subst -armel,-armhf,$(ARM_CPU_TYPE))
-	endif
-
-	ifeq ($(ARM_CPU_TYPE),arm-armel)
-		PKG_HASH:=54ad332d3f5bf62eafeae6e0396cc3db8cd8413b674437a79f7f1fa4cf1282e7
-	else ifeq ($(ARM_CPU_TYPE),arm-armhf)
-		PKG_HASH:=f793a5d3069c8bffdfc72a044e097a6edf4326e0207628465da8686a51dfb052
-	else ifeq ($(ARM_CPU_TYPE),armv5te-armel)
-		PKG_HASH:=85fbe6f1da86e2ab1ba446738018da7e332e8a638e460736c84ab1e89490fffb
-	else ifeq ($(ARM_CPU_TYPE),armv7-armel)
-		PKG_HASH:=4912b40e6def4facb5bb9a9d2f60d7fb00c80099c58169ce10588d718ee9c07b
-	else ifeq ($(ARM_CPU_TYPE),armv7-armhf)
-		PKG_HASH:=eef012ae1fe55463dded8061089d1746b9332daccaff3abf3567531ffb889da6
-	else
-		PKG_HASH:=dummy
-	endif
-else ifeq ($(ARCH),mips)
-	PKG_HASH:=5ac144223a11b9e691c486d22a95af4a2104566c1be191bcfb51942d5b40d6a0
-else ifeq ($(ARCH),mipsel)
-	PKG_HASH:=b1274df63584ede7636306b5a4960ff2c775a1bc73689bf5ef6d8e89afd397ec
-else ifeq ($(ARCH),powerpc64)
-	PKG_HASH:=0a7801f5befe6d61eee98a0c788739ea1f287d03c8b2fac1d752dba9449f9f61
-else ifeq ($(ARCH),riscv64)
-	PKG_HASH:=f025ebd37f7a958870aef3fcee1389b294b8c0d6a79c79cfa912715b80eb5449
-else ifeq ($(ARCH),x86_64)
-	PKG_HASH:=799c65a830329589992703be0198b2ad06635eba059d94d53cee400a6d588db8
+	PKG_HASH:=43ec7d6b0e0c8f797b70ad0db48e3c538ee0de6f9c7d1765a73fccc762426fa3
 else
+	# v0.1.6 release branch publishes only the target needed by the SNAPSHOT APK build.
 	PKG_HASH:=dummy
 endif
 
