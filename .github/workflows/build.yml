@@ -109,15 +109,9 @@ jobs:
       matrix:
         include:
           - platform: aarch64_cortex-a53
-            sdk_ver: 24.10.2
-            ver: "ipk"
+            sdk_ver: snapshots
+            ver: "apk"
     steps:
-      - name: Checkout
-        uses: actions/checkout@main
-        with:
-          fetch-depth: 0
-
-
       - name: Checkout
         uses: actions/checkout@main
         with:
