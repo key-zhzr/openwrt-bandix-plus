@@ -1,7 +1,7 @@
 include $(TOPDIR)/rules.mk
 
 PKG_NAME:=bandix-plus
-PKG_VERSION:=0.1.6
+PKG_VERSION:=0.1.7
 PKG_RELEASE:=1
 
 PKG_LICENSE:=Apache-2.0
@@ -13,7 +13,7 @@ include $(INCLUDE_DIR)/package.mk
 include $(TOPDIR)/feeds/packages/lang/rust/rust-values.mk
 
 # 二进制文件的文件名和URL
-RUST_BANDIX_PLUS_VERSION:=0.1.6
+RUST_BANDIX_PLUS_VERSION:=0.1.7
 RUST_BINARY_FILENAME:=bandix-plus-$(RUST_BANDIX_PLUS_VERSION)-$(RUSTC_TARGET_ARCH).tar.gz
 
 
@@ -23,9 +23,9 @@ PKG_SOURCE_URL:=https://github.com/key-zhzr/bandix-plus/releases/download/v$(RUS
 
 # 修正二进制文件校验值
 ifeq ($(ARCH),aarch64)
-	PKG_HASH:=43ec7d6b0e0c8f797b70ad0db48e3c538ee0de6f9c7d1765a73fccc762426fa3
+	PKG_HASH:=33fe5e713450cb4b5b493478c725a381e36fa2d7e7ae74f2262605932b631284
 else
-	# v0.1.6 release branch publishes only the target needed by the SNAPSHOT APK build.
+	# This release publishes only the target needed by the SNAPSHOT APK build.
 	PKG_HASH:=dummy
 endif
 

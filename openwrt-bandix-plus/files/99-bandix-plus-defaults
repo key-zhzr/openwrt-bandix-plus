@@ -18,6 +18,8 @@ uci -q get bandix_plus.general.host >/dev/null 2>&1 || uci -q set bandix_plus.ge
 uci -q get bandix_plus.general.history_window_minutes >/dev/null 2>&1 || uci -q set bandix_plus.general.history_window_minutes='10'
 uci -q get bandix_plus.general.data_dir >/dev/null 2>&1 || uci -q set bandix_plus.general.data_dir='/usr/share/bandix-plus'
 
+uci -q get bandix_plus.general.bpf_map_max_entries >/dev/null 2>&1 || uci -q set bandix_plus.general.bpf_map_max_entries='65536'
+
 uci -q commit bandix_plus
 
 exit 0

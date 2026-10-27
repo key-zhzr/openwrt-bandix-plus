@@ -26,6 +26,7 @@ start_service() {
 	local tcx_anchor_egress_id
 	local traffic_enable_storage
 	local traffic_retention_days
+	local bpf_map_max_entries
 	local history_window_minutes
 	local host
 	local port
@@ -43,6 +44,7 @@ start_service() {
 	config_get tcx_anchor_egress_id 'general' 'tcx_anchor_egress_id'
 	config_get_bool traffic_enable_storage 'general' 'traffic_enable_storage' '0'
 	config_get traffic_retention_days 'general' 'traffic_retention_days' '366'
+	config_get bpf_map_max_entries 'general' 'bpf_map_max_entries' '65536'
 	config_get history_window_minutes 'general' 'history_window_minutes' '10'
 	config_get host 'general' 'host' '127.0.0.1'
 	config_get port 'general' 'port' '8787'
@@ -50,6 +52,17 @@ start_service() {
 	config_list_foreach 'general' 'iface' append_iface
 
 	[ "$enable_traffic" -eq 1 ] || return 1
+	case "$bpf_map_max_entries" in
+		''|*[!0-9]*) logger -t bandix-plus 'invalid bpf_map_max_entries (expected 1024..65536)'; return 1 ;;
+	esac
+	if [ "${#bpf_map_max_entries}" -gt 5 ] || [ "$bpf_map_max_entries" -lt 1024 ] || [ "$bpf_map_max_entries" -gt 65536 ]; then
+		logger -t bandix-plus 'invalid bpf_map_max_entries (expected 1024..65536)'
+		return 1
+	fi
+	# Keep the router-specific persistent-backup integration across package upgrades.
+	if [ -x /usr/libexec/bandix-storage-maintenance.sh ]; then
+		/usr/libexec/bandix-storage-maintenance.sh restore || return 1
+	fi
 	[ -n "$IFACES" ] || {
 		logger -t bandix-plus "no iface configured"
 		return 1
@@ -79,6 +92,7 @@ start_service() {
 	procd_open_instance bandix-plus
 	procd_set_param command "$PROG"
 	procd_append_param command --enable-traffic
+	procd_append_param command --bpf-map-max-entries "$bpf_map_max_entries"
 	procd_append_param command --log-level "$log_level"
 	procd_append_param command --tc-backend "$tc_backend"
 	procd_append_param command --tc-order "$tc_order"
